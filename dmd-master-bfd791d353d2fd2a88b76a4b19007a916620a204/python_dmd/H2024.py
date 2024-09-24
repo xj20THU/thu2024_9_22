@@ -1,23 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 
 class Hankel:
-    time = np.load('time.npy')
-    a = np.load('a.npy')
-    b = np.load('b.npy')
-    y = np.load('y.npy')
-    vdd = np.load('vdd.npy')
-    vd = max(vdd)
+
+    # 读取 Excel 文件
+    file_path = '103_totalV2.xlsx'
+    df = pd.read_excel(file_path)
+
+    # 显示前几行数据
+    # print("前几行数据：")
+    # print(df.head())
+
+    # 基本描述性统计信息
+    # print("\n描述性统计信息：")
+    # print(df.describe())
+
+    # 数据列的命名
+    time = df['时间（s）']
+    total_flow = df['总车流量']
+    emergency_flow = df['应急车道车流量']
+    avg_speed = df['平均车速（km/h）']
+    congestion_index = df['拥堵系数']
+
+
+    # a = np.load('a.npy')
+    # b = np.load('b.npy')
+    # y = np.load('y.npy')
+    # vdd = np.load('vdd.npy')
+    vd = max(congestion_index)
 
     inn = np.matrix(time)
-    inn = np.append(inn,[a],axis = 0)
-    inn = np.append(inn,[b],axis = 0)
+    inn = np.append(inn,[total_flow],axis = 0)
+    inn = np.append(inn,[emergency_flow],axis = 0)
+    inn = np.append(inn,[avg_speed],axis = 0)
 
+    vdd = [vd] * len(time)
     out = np.matrix(vdd)
 
-    out = np.append(out,[y],axis = 0)
+    out = np.append(out,[congestion_index],axis = 0)
     # print(out.shape,1111111111)
 
     time = inn[0,:]   #inn是np.matrix类型,第一行是time  第二行开始每一行代表一个输入
@@ -48,7 +71,7 @@ class Hankel:
         self.size_y = len(self.y)
 
     def mode(self):
-        self.mod = np.matrix(self.in_arr[1] * self.in_arr[2])
+        self.mod = np.matrix(self.in_arr[1] * self.in_arr[3])
         self.mod = self.mod[:,self.m:self.n]
         self.mod = np.append(self.mod,[[1] * (self.n-self.m)],axis = 0)
 
