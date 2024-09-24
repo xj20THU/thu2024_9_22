@@ -66,3 +66,21 @@ plt.title('平均车速随时间的变化')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+
+
+
+
+
+# 提取平均车速和总车流量的列
+avg_speed = df['平均车速（km/h）']
+total_flow = df['总车流量']
+
+# 画出车速和车流量的散点图
+plt.figure(figsize=(10, 6))
+plt.scatter(avg_speed, total_flow, color='blue', alpha=0.6)
+plt.xlabel('平均车速 (km/h)')
+plt.ylabel('总车流量')
+plt.title('车速与车流量的关系')
+plt.grid(True)
+plt.show()
